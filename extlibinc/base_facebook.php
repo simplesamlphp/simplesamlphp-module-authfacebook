@@ -775,7 +775,7 @@ abstract class BaseFacebook
     protected function establishCSRFTokenState()
     {
         if ($this->state === null) {
-            $this->state = md5(strval(uniqid(mt_rand()), true));
+            $this->state = md5(uniqid(strval(mt_rand()), true));
             $this->setPersistentData('state', $this->state);
         }
     }
