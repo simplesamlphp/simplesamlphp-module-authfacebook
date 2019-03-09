@@ -920,7 +920,7 @@ abstract class BaseFacebook
         $result = $this->_oauthRequest(
             $this->getUrl($domainKey, $path),
             $params
-        ),
+        );
 
         if ($result !== false) {
             $result = json_decode($result, true);
