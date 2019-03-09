@@ -377,7 +377,7 @@ abstract class BaseFacebook
             return false;
         }
 
-        if (($access_token_response === false) || empty($access_token_response)) {
+        if (empty($access_token_response)) {
             return false;
         }
 
@@ -824,7 +824,7 @@ abstract class BaseFacebook
             return false;
         }
 
-        if (($access_token_response === false) || empty($access_token_response)) {
+        if (empty($access_token_response)) {
             self::errorLog('No access token response');
             return false;
         }
@@ -857,9 +857,7 @@ abstract class BaseFacebook
             $params
         );
 
-        if ($result !== false) {
-            $result = json_decode($result, true);
-        }
+        $result = json_decode($result, true);
 
         // results are returned, errors are thrown
         if (is_array($result) && isset($result['error_code'])) {
@@ -909,9 +907,11 @@ abstract class BaseFacebook
             $params = $method;
             $method = 'GET';
         }
+
+        /** @var string $method */
         $params['method'] = $method; // method override as we always do a POST
 
-        if ($this->isVideoPost($path, /** @var string $method */ $method)) {
+        if ($this->isVideoPost($path, $method)) {
             $domainKey = 'graph_video';
         } else {
             $domainKey = 'graph';
@@ -922,9 +922,7 @@ abstract class BaseFacebook
             $params
         );
 
-        if ($result !== false) {
-            $result = json_decode($result, true);
-        }
+        $result = json_decode($result, true);
 
         // results are returned, errors are thrown
         if (is_array($result) && isset($result['error'])) {
@@ -942,7 +940,7 @@ abstract class BaseFacebook
      * @param string $url The path (required)
      * @param array $params The query/post data
      *
-     * @return string|false The decoded response object
+     * @return string The decoded response object
      * @throws FacebookApiException
      */
     protected function _oauthRequest($url, $params)
@@ -970,7 +968,7 @@ abstract class BaseFacebook
      * @param array $params The parameters to use for the POST body
      * @param resource|null $ch Initialized curl handle
      *
-     * @return string|false The response text
+     * @return string The response text
      */
     protected function makeRequest($url, $params, $ch = null)
     {
@@ -1037,6 +1035,7 @@ abstract class BaseFacebook
             throw $e;
         }
         curl_close($ch);
+        /** @var string $result */
         return $result;
     }
 
