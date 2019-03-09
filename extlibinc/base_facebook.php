@@ -377,7 +377,7 @@ abstract class BaseFacebook
             return false;
         }
 
-        if (empty($access_token_response)) {
+        if (($access_token_response === false) || empty($access_token_response)) {
             return false;
         }
 
@@ -824,7 +824,7 @@ abstract class BaseFacebook
             return false;
         }
 
-        if (empty($access_token_response)) {
+        if (($access_token_response === false) || empty($access_token_response)) {
             self::errorLog('No access token response');
             return false;
         }
@@ -852,13 +852,14 @@ abstract class BaseFacebook
         $params['api_key'] = $this->getAppId();
         $params['format'] = 'json-strings';
 
-        $result = json_decode(
-            $this->_oauthRequest(
-                $this->getApiUrl($params['method']),
-                $params
-            ),
-            true
+        $result = $this->_oauthRequest(
+            $this->getApiUrl($params['method']),
+            $params
         );
+
+        if ($result !== false) {
+            $result = json_decode($result, true);
+        }
 
         // results are returned, errors are thrown
         if (is_array($result) && isset($result['error_code'])) {
@@ -910,19 +911,20 @@ abstract class BaseFacebook
         }
         $params['method'] = $method; // method override as we always do a POST
 
-        if ($this->isVideoPost($path, $method)) {
+        if ($this->isVideoPost($path, /** @var string $method */ $method)) {
             $domainKey = 'graph_video';
         } else {
             $domainKey = 'graph';
         }
 
-        $result = json_decode(
-            $this->_oauthRequest(
-                $this->getUrl($domainKey, $path),
-                $params
-            ),
-            true
-        );
+        $result = $this->_oauthRequest(
+            $this->getUrl($domainKey, $path),
+            $params
+        ),
+
+        if ($result !== false) {
+            $result = json_decode($result, true);
+        }
 
         // results are returned, errors are thrown
         if (is_array($result) && isset($result['error'])) {
@@ -940,7 +942,7 @@ abstract class BaseFacebook
      * @param string $url The path (required)
      * @param array $params The query/post data
      *
-     * @return string|bool The decoded response object
+     * @return string|false The decoded response object
      * @throws FacebookApiException
      */
     protected function _oauthRequest($url, $params)
@@ -968,7 +970,7 @@ abstract class BaseFacebook
      * @param array $params The parameters to use for the POST body
      * @param resource|null $ch Initialized curl handle
      *
-     * @return string|true The response text
+     * @return string|false The response text
      */
     protected function makeRequest($url, $params, $ch = null)
     {
