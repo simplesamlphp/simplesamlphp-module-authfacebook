@@ -128,6 +128,7 @@ class Facebook extends \SimpleSAML\Auth\Source
         );
         $uid = $facebook->getUser();
 
+        $info = null;
         if ($uid > 0) {
             try {
                 $info = $facebook->api("/".$uid.($this->user_fields ? "?fields=".$this->user_fields : ""));
