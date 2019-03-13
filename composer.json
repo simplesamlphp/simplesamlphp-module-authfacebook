@@ -22,12 +22,11 @@
     },
     "autoload": {
         "psr-4": {
-            "SimpleSAML\\modules\\authfacebook\\": "lib/"
+            "SimpleSAML\\Module\\authfacebook\\": "lib/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Tests\\SimpleSAML\\modules\\authfacebook\\TestFiles\\": "tests/files",
             "SimpleSAML\\Test\\Utils\\": "vendor/simplesamlphp/simplesamlphp/tests/Utils"
         }
     },
