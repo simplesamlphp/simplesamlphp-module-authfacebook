@@ -4,8 +4,6 @@ namespace SimpleSAML\Module\authfacebook\Auth\Source;
 
 use SimpleSAML\Module;
 
-use Webmozart\Assert\Assert;
-
 /**
  * Authenticate using Facebook Platform.
  *
@@ -68,8 +66,8 @@ class Facebook extends \SimpleSAML\Auth\Source
      */
     public function __construct($info, $config)
     {
-        Assert::isArray($info);
-        Assert::isArray($config);
+        assert(is_array($info));
+        assert(is_array($config));
 
         // Call the parent constructor first, as required by the interface
         parent::__construct($info, $config);
@@ -94,7 +92,7 @@ class Facebook extends \SimpleSAML\Auth\Source
      */
     public function authenticate(&$state)
     {
-        Assert::isArray($state);
+        assert(is_array($state));
 
         // We are going to need the authId in order to retrieve this authentication source later
         $state[self::AUTHID] = $this->authId;
@@ -120,7 +118,7 @@ class Facebook extends \SimpleSAML\Auth\Source
      */
     public function finalStep(&$state)
     {
-        Assert::isArray($state);
+        assert(is_array($state));
 
         $facebook = new Module\authfacebook\Facebook(
             ['appId' => $this->api_key, 'secret' => $this->secret],
