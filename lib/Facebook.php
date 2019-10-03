@@ -2,7 +2,7 @@
 
 namespace SimpleSAML\Module\authfacebook;
 
-require_once(dirname(dirname(__FILE__)).'/extlibinc/base_facebook.php');
+require_once(dirname(dirname(__FILE__)) . '/extlibinc/base_facebook.php');
 
 /**
  * Extends the BaseFacebook class with the intent of using
@@ -68,8 +68,11 @@ class Facebook extends \BaseFacebook
         $cookie_name = $this->getSharedSessionCookieName();
         if (isset($_COOKIE[$cookie_name])) {
             $data = $this->parseSignedRequest($_COOKIE[$cookie_name]);
-            if (!empty($data) && !empty($data['domain']) &&
-                self::isAllowedDomain($this->getHttpHost(), $data['domain'])) {
+            if (
+                !empty($data)
+                && !empty($data['domain'])
+                && self::isAllowedDomain($this->getHttpHost(), $data['domain'])
+            ) {
                 // good case
                 $this->sharedSessionID = $data['id'];
                 return;
@@ -88,12 +91,12 @@ class Facebook extends \BaseFacebook
         $_COOKIE[$cookie_name] = $cookie_value;
         if (!headers_sent()) {
             $expire = time() + self::FBSS_COOKIE_EXPIRE;
-            setcookie($cookie_name, $cookie_value, $expire, '/', '.'.$base_domain);
+            setcookie($cookie_name, $cookie_value, $expire, '/', '.' . $base_domain);
         } else {
             // @codeCoverageIgnoreStart
             \SimpleSAML\Logger::debug(
-                'Shared session ID cookie could not be set! You must ensure you '.
-                'create the Facebook instance before headers have been sent. This '.
+                'Shared session ID cookie could not be set! You must ensure you ' .
+                'create the Facebook instance before headers have been sent. This ' .
                 'will cause authentication issues after the first request.'
             );
             // @codeCoverageIgnoreEnd
@@ -114,7 +117,7 @@ class Facebook extends \BaseFacebook
     protected function setPersistentData($key, $value)
     {
         if (!in_array($key, self::$kSupportedKeys)) {
-            \SimpleSAML\Logger::debug("Unsupported key passed to setPersistentData: ".var_export($key, true));
+            \SimpleSAML\Logger::debug("Unsupported key passed to setPersistentData: " . var_export($key, true));
             return;
         }
 
@@ -131,7 +134,7 @@ class Facebook extends \BaseFacebook
     protected function getPersistentData($key, $default = false)
     {
         if (!in_array($key, self::$kSupportedKeys)) {
-            \SimpleSAML\Logger::debug("Unsupported key passed to getPersistentData: ".var_export($key, true));
+            \SimpleSAML\Logger::debug("Unsupported key passed to getPersistentData: " . var_export($key, true));
             return $default;
         }
 
@@ -147,7 +150,7 @@ class Facebook extends \BaseFacebook
     protected function clearPersistentData($key)
     {
         if (!in_array($key, self::$kSupportedKeys)) {
-            \SimpleSAML\Logger::debug("Unsupported key passed to clearPersistentData: ".var_export($key, true));
+            \SimpleSAML\Logger::debug("Unsupported key passed to clearPersistentData: " . var_export($key, true));
             return;
         }
 
@@ -180,7 +183,7 @@ class Facebook extends \BaseFacebook
         $cookie_name = $this->getSharedSessionCookieName();
         unset($_COOKIE[$cookie_name]);
         $base_domain = $this->getBaseDomain();
-        setcookie($cookie_name, '', 1, '/', '.'.$base_domain);
+        setcookie($cookie_name, '', 1, '/', '.' . $base_domain);
     }
 
 
@@ -189,7 +192,7 @@ class Facebook extends \BaseFacebook
      */
     protected function getSharedSessionCookieName()
     {
-        return self::FBSS_COOKIE_NAME.'_'.$this->getAppId();
+        return self::FBSS_COOKIE_NAME . '_' . $this->getAppId();
     }
 
 
