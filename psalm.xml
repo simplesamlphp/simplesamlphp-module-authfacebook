@@ -7,6 +7,7 @@
     <projectFiles>
         <directory name="lib" />
         <directory name="extlibinc" />
+        <directory name="tests" />
         <directory name="www" />
     </projectFiles>
 
@@ -28,5 +29,12 @@
         <MissingParamType errorLevel="info" />
         <UnusedClass errorLevel="info" />
         <PossiblyUnusedMethod errorLevel="info" />
+
+        <!-- Ignore UnresolvableInclude -->
+        <UnresolvableInclude>
+            <errorLevel type="suppress">
+                <file name="tests/bootstrap.php" />
+            </errorLevel>
+        </UnresolvableInclude>
     </issueHandlers>
 </psalm>

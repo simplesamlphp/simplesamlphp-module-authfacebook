@@ -2,8 +2,12 @@
 
 namespace SimpleSAML\Module\authfacebook\Auth\Source;
 
+use SimpleSAML\Auth;
+use SimpleSAML\Configuration;
+use SimpleSAML\Error;
+use SimpleSAML\Logger;
 use SimpleSAML\Module;
-
+use SimpleSAML\Utils;
 use Webmozart\Assert\Assert;
 
 /**
@@ -13,18 +17,18 @@ use Webmozart\Assert\Assert;
  * @package SimpleSAMLphp
  */
 
-class Facebook extends \SimpleSAML\Auth\Source
+class Facebook extends Auth\Source
 {
     /**
      * The string used to identify our states.
      */
-    const STAGE_INIT = 'facebook:init';
+    public const STAGE_INIT = 'facebook:init';
 
 
     /**
      * The key of the AuthId field in the state.
      */
-    const AUTHID = 'facebook:AuthId';
+    public const AUTHID = 'facebook:AuthId';
 
 
     /**
@@ -66,17 +70,14 @@ class Facebook extends \SimpleSAML\Auth\Source
      * @param array $info  Information about this authentication source.
      * @param array $config  Configuration.
      */
-    public function __construct($info, $config)
+    public function __construct(array $info, array $config)
     {
-        Assert::isArray($info);
-        Assert::isArray($config);
-
         // Call the parent constructor first, as required by the interface
         parent::__construct($info, $config);
 
-        $cfgParse = \SimpleSAML\Configuration::loadFromArray(
+        $cfgParse = Configuration::loadFromArray(
             $config,
-            'authsources['.var_export($this->authId, true).']'
+            'authsources[' . var_export($this->authId, true) . ']'
         );
 
         $this->api_key = $cfgParse->getString('api_key');
@@ -92,13 +93,11 @@ class Facebook extends \SimpleSAML\Auth\Source
      * @param array &$state  Information about the current authentication.
      * @return void
      */
-    public function authenticate(&$state)
+    public function authenticate(array &$state): void
     {
-        Assert::isArray($state);
-
         // We are going to need the authId in order to retrieve this authentication source later
         $state[self::AUTHID] = $this->authId;
-        \SimpleSAML\Auth\State::saveState($state, self::STAGE_INIT);
+        Auth\State::saveState($state, self::STAGE_INIT);
 
         $facebook = new Module\authfacebook\Facebook(
             ['appId' => $this->api_key, 'secret' => $this->secret],
@@ -108,9 +107,9 @@ class Facebook extends \SimpleSAML\Auth\Source
 
         $linkback = Module::getModuleURL('authfacebook/linkback.php');
         $url = $facebook->getLoginUrl(['redirect_uri' => $linkback, 'scope' => $this->req_perms]);
-        \SimpleSAML\Auth\State::saveState($state, self::STAGE_INIT);
+        Auth\State::saveState($state, self::STAGE_INIT);
 
-        \SimpleSAML\Utils\HTTP::redirectTrustedURL($url);
+        Utils\HTTP::redirectTrustedURL($url);
     }
 
 
@@ -118,10 +117,8 @@ class Facebook extends \SimpleSAML\Auth\Source
      * @param array &$state
      * @return void
      */
-    public function finalStep(&$state)
+    public function finalStep(array &$state): void
     {
-        Assert::isArray($state);
-
         $facebook = new Module\authfacebook\Facebook(
             ['appId' => $this->api_key, 'secret' => $this->secret],
             $state
@@ -131,33 +128,33 @@ class Facebook extends \SimpleSAML\Auth\Source
         $info = null;
         if ($uid > 0) {
             try {
-                $info = $facebook->api("/".$uid.($this->user_fields ? "?fields=".$this->user_fields : ""));
+                $info = $facebook->api("/" . $uid . ($this->user_fields ? "?fields=" . $this->user_fields : ""));
             } catch (\FacebookApiException $e) {
-                throw new \SimpleSAML\Error\AuthSource($this->authId, 'Error getting user profile.', $e);
+                throw new Error\AuthSource($this->authId, 'Error getting user profile.', $e);
             }
         }
 
         if (!isset($info)) {
-            throw new \SimpleSAML\Error\AuthSource($this->authId, 'Error getting user profile.');
+            throw new Error\AuthSource($this->authId, 'Error getting user profile.');
         }
 
         $attributes = [];
         foreach ($info as $key => $value) {
             if (is_string($value) && !empty($value)) {
-                $attributes['facebook.'.$key] = [(string) $value];
+                $attributes['facebook . ' . $key] = [(string) $value];
             }
         }
 
         if (array_key_exists('third_party_id', $info)) {
-            $attributes['facebook_user'] = [$info['third_party_id'].'@facebook.com'];
+            $attributes['facebook_user'] = [$info['third_party_id'] . '@facebook.com'];
         } else {
-            $attributes['facebook_user'] = [$uid.'@facebook.com'];
+            $attributes['facebook_user'] = [$uid . '@facebook.com'];
         }
 
-        $attributes['facebook_targetedID'] = ['http://facebook.com!'.$uid];
+        $attributes['facebook_targetedID'] = ['http://facebook.com!' . $uid];
         $attributes['facebook_cn'] = [$info['name']];
 
-        \SimpleSAML\Logger::debug('Facebook Returned Attributes: '.implode(", ", array_keys($attributes)));
+        Logger::debug('Facebook Returned Attributes: ' . implode(", ", array_keys($attributes)));
 
         $state['Attributes'] = $attributes;
 

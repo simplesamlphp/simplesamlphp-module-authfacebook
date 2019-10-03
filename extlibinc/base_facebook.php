@@ -102,11 +102,11 @@ class FacebookApiException extends Exception
      */
     public function __toString()
     {
-        $str = $this->getType().': ';
+        $str = $this->getType() . ': ';
         if ($this->code != 0) {
-            $str .= $this->code.': ';
+            $str .= $this->code . ': ';
         }
-        return $str.$this->message;
+        return $str . $this->message;
     }
 }
 
@@ -218,7 +218,7 @@ abstract class BaseFacebook
      *
      * @param array $config The application configuration
      */
-    public function __construct($config)
+    public function __construct(array $config)
     {
         $this->setAppId($config['appId']);
         $this->setAppSecret($config['secret']);
@@ -240,7 +240,7 @@ abstract class BaseFacebook
      * @param string $appId The Application ID
      * @return BaseFacebook
      */
-    public function setAppId($appId)
+    public function setAppId(string $appId): BaseFacebook
     {
         $this->appId = $appId;
         return $this;
@@ -251,7 +251,7 @@ abstract class BaseFacebook
      *
      * @return string the Application ID
      */
-    public function getAppId()
+    public function getAppId(): string
     {
         return $this->appId;
     }
@@ -263,7 +263,7 @@ abstract class BaseFacebook
      * @return BaseFacebook
      * @deprecated
      */
-    public function setApiSecret($apiSecret)
+    public function setApiSecret(string $apiSecret): BaseFacebook
     {
         $this->setAppSecret($apiSecret);
         return $this;
@@ -275,7 +275,7 @@ abstract class BaseFacebook
      * @param string $appSecret The App Secret
      * @return BaseFacebook
      */
-    public function setAppSecret($appSecret)
+    public function setAppSecret(string $appSecret): BaseFacebook
     {
         $this->appSecret = $appSecret;
         return $this;
@@ -287,7 +287,7 @@ abstract class BaseFacebook
      * @return string the App Secret
      * @deprecated
      */
-    public function getApiSecret()
+    public function getApiSecret(): string
     {
         return $this->getAppSecret();
     }
@@ -297,7 +297,7 @@ abstract class BaseFacebook
      *
      * @return string the App Secret
      */
-    public function getAppSecret()
+    public function getAppSecret(): string
     {
         return $this->appSecret;
     }
@@ -308,7 +308,7 @@ abstract class BaseFacebook
      * @param boolean $fileUploadSupport The file upload support status.
      * @return BaseFacebook
      */
-    public function setFileUploadSupport($fileUploadSupport)
+    public function setFileUploadSupport(bool $fileUploadSupport): BaseFacebook
     {
         $this->fileUploadSupport = $fileUploadSupport;
         return $this;
@@ -319,7 +319,7 @@ abstract class BaseFacebook
      *
      * @return boolean true if and only if the server supports file upload.
      */
-    public function getFileUploadSupport()
+    public function getFileUploadSupport(): bool
     {
         return $this->fileUploadSupport;
     }
@@ -331,7 +331,7 @@ abstract class BaseFacebook
      *
      * @return boolean true if and only if the server supports file upload.
      */
-    public function useFileUploadSupport()
+    public function useFileUploadSupport(): bool
     {
         return $this->getFileUploadSupport();
     }
@@ -344,7 +344,7 @@ abstract class BaseFacebook
      * @param string $access_token an access token.
      * @return BaseFacebook
      */
-    public function setAccessToken($access_token)
+    public function setAccessToken(string $access_token): BaseFacebook
     {
         $this->accessToken = $access_token;
         return $this;
@@ -357,7 +357,7 @@ abstract class BaseFacebook
      *
      * @return boolean Return true is the access token is set.
      */
-    public function setExtendedAccessToken()
+    public function setExtendedAccessToken(): bool
     {
         try {
             // need to circumvent json_decode by calling _oauthRequest
@@ -406,7 +406,7 @@ abstract class BaseFacebook
      *
      * @return string|null The access token
      */
-    public function getAccessToken()
+    public function getAccessToken(): ?string
     {
         if ($this->accessToken !== null) {
             // we've done this already and cached it.  Just return.
@@ -499,7 +499,7 @@ abstract class BaseFacebook
      *
      * @return array|null the signed request, if available, or null otherwise.
      */
-    public function getSignedRequest()
+    public function getSignedRequest(): ?array
     {
         if (!$this->signedRequest) {
             if (!empty($_REQUEST['signed_request'])) {
@@ -521,7 +521,7 @@ abstract class BaseFacebook
      *
      * @return int the UID if available.
      */
-    public function getUser()
+    public function getUser(): int
     {
         if ($this->user !== null) {
             // we've already determined this and cached the value
@@ -539,7 +539,7 @@ abstract class BaseFacebook
      * @return int The id of the connected Facebook user,
      *                 or 0 if no such user exists.
      */
-    protected function getUserFromAvailableData()
+    protected function getUserFromAvailableData(): int
     {
         // if a signed request is supplied, then it solely determines
         // who the user is
@@ -568,9 +568,12 @@ abstract class BaseFacebook
         // use access_token to fetch user id if we have a user access_token, or if
         // the cached access token has changed
         $access_token = $this->getAccessToken();
-        if ($access_token &&
-            $access_token != $this->getApplicationAccessToken() &&
-            !($user && $persisted_access_token == $access_token)) {
+        if (
+            $access_token
+            && $access_token != $this->getApplicationAccessToken()
+            && !($user
+            && $persisted_access_token == $access_token)
+        ) {
             $user = $this->getUserFromAccessToken();
             if ($user) {
                 $this->setPersistentData('user_id', $user);
@@ -594,7 +597,7 @@ abstract class BaseFacebook
      * @param array $params Provide custom parameters
      * @return string The URL for the login flow
      */
-    public function getLoginUrl($params = [])
+    public function getLoginUrl(array $params = []): string
     {
         $this->establishCSRFTokenState();
         $currentUrl = $this->getCurrentUrl();
@@ -628,7 +631,7 @@ abstract class BaseFacebook
      * @param array $params Provide custom parameters
      * @return string The URL for the logout flow
      */
-    public function getLogoutUrl($params = [])
+    public function getLogoutUrl(array $params = []): string
     {
         return $this->getUrl(
             'www',
@@ -651,7 +654,7 @@ abstract class BaseFacebook
      * @param array $params Provide custom parameters
      * @return string The URL for the logout flow
      */
-    public function getLoginStatusUrl($params = [])
+    public function getLoginStatusUrl(array $params = []): string
     {
         return $this->getUrl(
             'www',
@@ -690,9 +693,9 @@ abstract class BaseFacebook
      * @return string the name of the cookie that would house
      *         the signed request value.
      */
-    protected function getSignedRequestCookieName()
+    protected function getSignedRequestCookieName(): string
     {
-        return 'fbsr_'.$this->getAppId();
+        return 'fbsr_' . $this->getAppId();
     }
 
     /**
@@ -702,9 +705,9 @@ abstract class BaseFacebook
      *
      * @return string the name of the cookie that would house metadata.
      */
-    protected function getMetadataCookieName()
+    protected function getMetadataCookieName(): string
     {
-        return 'fbm_'.$this->getAppId();
+        return 'fbm_' . $this->getAppId();
     }
 
     /**
@@ -718,16 +721,19 @@ abstract class BaseFacebook
     protected function getCode()
     {
         if (isset($_REQUEST['code'])) {
-            if ($this->state !== null &&
-                isset($_REQUEST['state']) &&
-                $this->state === $_REQUEST['state']
+            if (
+                $this->state !== null
+                && isset($_REQUEST['state'])
+                && $this->state === $_REQUEST['state']
             ) {
                 // CSRF state has done its job, so clear it
                 $this->state = null;
                 $this->clearPersistentData('state');
                 return $_REQUEST['code'];
             } else {
-                self::errorLog('CSRF state token does not match one provided. '.strval($this->state).'!='.$_REQUEST['state']);
+                self::errorLog(
+                    'CSRF state token does not match one provided. ' . strval($this->state) . '!=' . $_REQUEST['state']
+                );
                 return false;
             }
         }
@@ -745,7 +751,7 @@ abstract class BaseFacebook
      * @return integer Returns the UID of the Facebook user, or 0
      *                 if the Facebook user could not be determined.
      */
-    protected function getUserFromAccessToken()
+    protected function getUserFromAccessToken(): int
     {
         try {
             $user_info = $this->api('/me');
@@ -762,9 +768,9 @@ abstract class BaseFacebook
      * @return string The application access token, useful for gathering
      *                public information about users and applications.
      */
-    protected function getApplicationAccessToken()
+    protected function getApplicationAccessToken(): string
     {
-        return $this->appId.'|'.$this->appSecret;
+        return $this->appId . '|' . $this->appSecret;
     }
 
     /**
@@ -772,7 +778,7 @@ abstract class BaseFacebook
      *
      * @return void
      */
-    protected function establishCSRFTokenState()
+    protected function establishCSRFTokenState(): void
     {
         if ($this->state === null) {
             $this->state = md5(uniqid(strval(mt_rand()), true));
@@ -793,7 +799,7 @@ abstract class BaseFacebook
      * @return mixed An access token exchanged for the authorization code, or
      *               false if an access token could not be generated.
      */
-    protected function getAccessTokenFromCode($code, $redirect_uri = null)
+    protected function getAccessTokenFromCode(string $code, string $redirect_uri = null)
     {
         if (empty($code)) {
             return false;
@@ -831,7 +837,7 @@ abstract class BaseFacebook
 
         $response_params = json_decode($access_token_response, true);
         if (!isset($response_params['access_token'])) {
-            self::errorLog('No access token in response. '.$access_token_response);
+            self::errorLog('No access token in response. ' . $access_token_response);
             return false;
         }
 
@@ -846,7 +852,7 @@ abstract class BaseFacebook
      * @return mixed The decoded response object
      * @throws FacebookApiException
      */
-    protected function _restserver($params)
+    protected function _restserver(array $params)
     {
         // generic application level parameters
         $params['api_key'] = $this->getAppId();
@@ -867,8 +873,10 @@ abstract class BaseFacebook
         // @codeCoverageIgnoreEnd
 
         $method = strtolower($params['method']);
-        if ($method === 'auth.expiresession' ||
-            $method === 'auth.revokeauthorization') {
+        if (
+            $method === 'auth.expiresession'
+            || $method === 'auth.revokeauthorization'
+        ) {
             $this->destroySession();
         }
 
@@ -883,7 +891,7 @@ abstract class BaseFacebook
      *
      * @return boolean true if this is video post
      */
-    protected function isVideoPost($path, $method = 'GET')
+    protected function isVideoPost(string $path, string $method = 'GET'): bool
     {
         if ($method == 'POST' && preg_match("/^(\/)(.+)(\/)(videos)$/", $path)) {
             return true;
@@ -895,13 +903,13 @@ abstract class BaseFacebook
      * Invoke the Graph API.
      *
      * @param string $path The path (required)
-     * @param array|string $method The http method (default 'GET')
+     * @param string|array $method The http method (default 'GET')
      * @param array $params The query/post data
      *
      * @return mixed The decoded response object
      * @throws FacebookApiException
      */
-    protected function _graph($path, $method = 'GET', $params = [])
+    protected function _graph(string $path, $method = 'GET', array $params = [])
     {
         if (is_array($method) && empty($params)) {
             $params = $method;
@@ -943,7 +951,7 @@ abstract class BaseFacebook
      * @return string The decoded response object
      * @throws FacebookApiException
      */
-    protected function _oauthRequest($url, $params)
+    protected function _oauthRequest(string $url, array $params): string
     {
         if (!isset($params['access_token'])) {
             $params['access_token'] = $this->getAccessToken();
@@ -970,7 +978,7 @@ abstract class BaseFacebook
      *
      * @return string The response text
      */
-    protected function makeRequest($url, $params, $ch = null)
+    protected function makeRequest(string $url, array $params, $ch = null): string
     {
         if ($ch === null) {
             $ch = curl_init();
@@ -980,7 +988,7 @@ abstract class BaseFacebook
         if ($this->getFileUploadSupport()) {
             $opts[CURLOPT_POSTFIELDS] = $params;
         } else {
-            $opts[CURLOPT_POSTFIELDS] = http_build_query($params, null, '&');
+            $opts[CURLOPT_POSTFIELDS] = http_build_query($params, '', '&');
         }
         $opts[CURLOPT_URL] = $url;
 
@@ -1000,7 +1008,7 @@ abstract class BaseFacebook
         if (curl_errno($ch) == 60) {
             // CURLE_SSL_CACERT
             self::errorLog('Invalid or no certificate authority found, using bundled information');
-            curl_setopt($ch, CURLOPT_CAINFO, dirname(__FILE__).'/fb_ca_chain_bundle.crt');
+            curl_setopt($ch, CURLOPT_CAINFO, dirname(__FILE__) . '/fb_ca_chain_bundle.crt');
             $result = curl_exec($ch);
         }
 
@@ -1014,7 +1022,7 @@ abstract class BaseFacebook
             $regex = '/Failed to connect to ([^:].*): Network is unreachable/';
             if (preg_match($regex, curl_error($ch), $matches)) {
                 if (strlen(@inet_pton($matches[1])) === 16) {
-                    self::errorLog('Invalid IPv6 configuration on server, '.
+                    self::errorLog('Invalid IPv6 configuration on server, ' .
                             'Please disable or get native IPv6 on your server.');
                     self::$CURL_OPTS[CURLOPT_IPRESOLVE] = CURL_IPRESOLVE_V4;
                     curl_setopt($ch, CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V4);
@@ -1045,7 +1053,7 @@ abstract class BaseFacebook
      * @param string $signed_request A signed token
      * @return array|null The payload inside it or null if the sig is wrong
      */
-    protected function parseSignedRequest($signed_request)
+    protected function parseSignedRequest(string $signed_request): ?array
     {
         list($encoded_sig, $payload) = explode('.', $signed_request, 2);
 
@@ -1054,7 +1062,7 @@ abstract class BaseFacebook
         $data = json_decode(self::base64UrlDecode($payload), true);
 
         if (strtoupper($data['algorithm']) !== self::SIGNED_REQUEST_ALGORITHM) {
-            self::errorLog('Unknown algorithm. Expected '.self::SIGNED_REQUEST_ALGORITHM);
+            self::errorLog('Unknown algorithm. Expected ' . self::SIGNED_REQUEST_ALGORITHM);
             return null;
         }
 
@@ -1074,7 +1082,7 @@ abstract class BaseFacebook
      * @param array $data The data array.
      * @return string The signed request.
      */
-    protected function makeSignedRequest(array $data)
+    protected function makeSignedRequest(array $data): string
     {
         $data['algorithm'] = self::SIGNED_REQUEST_ALGORITHM;
         $data['issued_at'] = time();
@@ -1082,7 +1090,7 @@ abstract class BaseFacebook
         $b64 = self::base64UrlEncode($json);
         $raw_sig = hash_hmac('sha256', $b64, $this->getAppSecret(), $raw = true);
         $sig = self::base64UrlEncode($raw_sig);
-        return $sig.'.'.$b64;
+        return $sig . ' . ' . $b64;
     }
 
     /**
@@ -1091,7 +1099,7 @@ abstract class BaseFacebook
      * @param string $method String the method name.
      * @return string The URL for the given parameters
      */
-    protected function getApiUrl($method)
+    protected function getApiUrl(string $method): string
     {
         static $READ_ONLY_CALLS =
             [
@@ -1174,7 +1182,7 @@ abstract class BaseFacebook
      *
      * @return string The URL for the given parameters
      */
-    protected function getUrl($name, $path = '', $params = [])
+    protected function getUrl(string $name, string $path = '', array $params = []): string
     {
         $url = self::$DOMAIN_MAP[$name];
         if ($path) {
@@ -1184,7 +1192,7 @@ abstract class BaseFacebook
             $url .= $path;
         }
         if (!empty($params)) {
-            $url .= '?'.http_build_query($params, null, '&');
+            $url .= '?' . http_build_query($params, '', '&');
         }
 
         return $url;
@@ -1193,7 +1201,7 @@ abstract class BaseFacebook
     /**
      * @return string
      */
-    protected function getHttpHost()
+    protected function getHttpHost(): string
     {
         if ($this->trustForwarded && isset($_SERVER['HTTP_X_FORWARDED_HOST'])) {
             return $_SERVER['HTTP_X_FORWARDED_HOST'];
@@ -1204,7 +1212,7 @@ abstract class BaseFacebook
     /**
      * @return string
      */
-    protected function getHttpProtocol()
+    protected function getHttpProtocol(): string
     {
         if ($this->trustForwarded && isset($_SERVER['HTTP_X_FORWARDED_PROTO'])) {
             if ($_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https') {
@@ -1227,7 +1235,7 @@ abstract class BaseFacebook
      * Get the base domain used for the cookie.
      * @return string
      */
-    protected function getBaseDomain()
+    protected function getBaseDomain(): string
     {
         // The base domain is stored in the metadata cookie if not we fallback
         // to the current hostname
@@ -1244,11 +1252,11 @@ abstract class BaseFacebook
      *
      * @return string The current URL
      */
-    protected function getCurrentUrl()
+    protected function getCurrentUrl(): string
     {
-        $protocol = $this->getHttpProtocol().'://';
+        $protocol = $this->getHttpProtocol() . '://';
         $host = $this->getHttpHost();
-        $currentUrl = $protocol.$host.$_SERVER['REQUEST_URI'];
+        $currentUrl = $protocol . $host . $_SERVER['REQUEST_URI'];
         $parts = parse_url($currentUrl);
 
         // use port if non default
@@ -1256,10 +1264,10 @@ abstract class BaseFacebook
             isset($parts['port']) &&
             (($protocol === 'http://' && $parts['port'] !== 80) ||
             ($protocol === 'https://' && $parts['port'] !== 443))
-            ? ':'.$parts['port'] : '';
+            ? ':' . $parts['port'] : '';
 
         // rebuild
-        return $protocol.$parts['host'].$port.$parts['path'];
+        return $protocol . $parts['host'] . $port . $parts['path'];
     }
 
     /**
@@ -1271,7 +1279,7 @@ abstract class BaseFacebook
      *                      by a failed API call.
      * @return void
      */
-    protected function throwAPIException($result)
+    protected function throwAPIException(array $result): void
     {
         $e = new FacebookApiException($result);
         switch ($e->getType()) {
@@ -1282,7 +1290,8 @@ abstract class BaseFacebook
             // REST server errors are just Exceptions
             case 'Exception':
                 $message = $e->getMessage();
-                if ((strpos($message, 'Error validating access token') !== false) ||
+                if (
+                    (strpos($message, 'Error validating access token') !== false) ||
                     (strpos($message, 'Invalid OAuth access token') !== false) ||
                     (strpos($message, 'An active access token must be used') !== false)
                 ) {
@@ -1301,7 +1310,7 @@ abstract class BaseFacebook
      * @param string $msg Log message
      * @return void
      */
-    protected static function errorLog($msg)
+    protected static function errorLog(string $msg): void
     {
         // disable error log if we are running in a CLI environment
         // @codeCoverageIgnoreStart
@@ -1321,7 +1330,7 @@ abstract class BaseFacebook
      * @param string $input base64UrlEncoded string
      * @return string
      */
-    protected static function base64UrlDecode($input)
+    protected static function base64UrlDecode(string $input): string
     {
         return base64_decode(strtr($input, '-_', '+/'));
     }
@@ -1335,7 +1344,7 @@ abstract class BaseFacebook
      * @param string $input string
      * @return string base64Url encoded string
      */
-    protected static function base64UrlEncode($input)
+    protected static function base64UrlEncode(string $input): string
     {
         $str = strtr(base64_encode($input), '+/', '-_');
         $str = str_replace('=', '', $str);
@@ -1346,7 +1355,7 @@ abstract class BaseFacebook
      * Destroy the current session
      * @return void
      */
-    public function destroySession()
+    public function destroySession(): void
     {
         $this->accessToken = null;
         $this->signedRequest = null;
@@ -1360,12 +1369,12 @@ abstract class BaseFacebook
             unset($_COOKIE[$cookie_name]);
             if (!headers_sent()) {
                 $base_domain = $this->getBaseDomain();
-                setcookie($cookie_name, '', 1, '/', '.'.$base_domain);
+                setcookie($cookie_name, '', 1, '/', '.' . $base_domain);
             } else {
                 // @codeCoverageIgnoreStart
                 self::errorLog(
-                    'There exists a cookie that we wanted to clear that we couldn\'t '.
-                    'clear because headers was already sent. Make sure to do the first '.
+                    'There exists a cookie that we wanted to clear that we couldn\'t ' .
+                    'clear because headers was already sent. Make sure to do the first ' .
                     'API call before outputing anything.'
                 );
                 // @codeCoverageIgnoreEnd
@@ -1378,7 +1387,7 @@ abstract class BaseFacebook
      *
      * @return array an array mapping key to value
      */
-    protected function getMetadataCookie()
+    protected function getMetadataCookie(): array
     {
         $cookie_name = $this->getMetadataCookieName();
         if (!array_key_exists($cookie_name, $_COOKIE)) {
@@ -1409,12 +1418,12 @@ abstract class BaseFacebook
      * @param string $small
      * @return string|bool
      */
-    protected static function isAllowedDomain($big, $small)
+    protected static function isAllowedDomain(string $big, string $small)
     {
         if ($big === $small) {
             return true;
         }
-        return self::endsWith($big, '.'.$small);
+        return self::endsWith($big, '.' . $small);
     }
 
     /**
@@ -1422,7 +1431,7 @@ abstract class BaseFacebook
      * @param string $small
      * @return string|bool
      */
-    protected static function endsWith($big, $small)
+    protected static function endsWith(string $big, string $small)
     {
         $len = strlen($small);
         if ($len === 0) {
@@ -1450,7 +1459,7 @@ abstract class BaseFacebook
      *
      * @return void
      */
-    abstract protected function setPersistentData($key, $value);
+    abstract protected function setPersistentData(string $key, $value): void;
 
     /**
      * Get the data for $key, persisted by BaseFacebook::setPersistentData()
@@ -1460,7 +1469,7 @@ abstract class BaseFacebook
      *
      * @return mixed
      */
-    abstract protected function getPersistentData($key, $default = false);
+    abstract protected function getPersistentData(string $key, bool $default = false);
 
     /**
      * Clear the data with $key from the persistent storage
@@ -1468,12 +1477,12 @@ abstract class BaseFacebook
      * @param string $key
      * @return void
      */
-    abstract protected function clearPersistentData($key);
+    abstract protected function clearPersistentData(string $key): void;
 
     /**
      * Clear all data from the persistent storage
      *
      * @return void
      */
-    abstract protected function clearAllPersistentData();
+    abstract protected function clearAllPersistentData(): void;
 }
