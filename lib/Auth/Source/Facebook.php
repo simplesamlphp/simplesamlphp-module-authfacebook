@@ -147,7 +147,7 @@ class Facebook extends \SimpleSAML\Auth\Source
         $attributes = [];
         foreach ($info as $key => $value) {
             if (is_string($value) && !empty($value)) {
-                $attributes['facebook . ' . $key] = [(string) $value];
+                $attributes['facebook.' . $key] = [(string) $value];
             }
         }
 
