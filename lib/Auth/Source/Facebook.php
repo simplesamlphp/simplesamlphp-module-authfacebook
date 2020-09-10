@@ -13,7 +13,6 @@ use Webmozart\Assert\Assert;
 /**
  * Authenticate using Facebook Platform.
  *
- * @author Andreas Åkre Solberg, UNINETT AS.
  * @package SimpleSAMLphp
  */
 

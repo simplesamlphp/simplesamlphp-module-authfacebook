@@ -25,7 +25,6 @@ if (!function_exists('json_decode')) {
 /**
  * Thrown when an API call returns an exception.
  *
- * @author Naitik Shah <naitik@facebook.com>
  */
 class FacebookApiException extends Exception
 {
@@ -117,7 +116,6 @@ class FacebookApiException extends Exception
  * implement the four abstract methods listed at the bottom of
  * the file.
  *
- * @author Naitik Shah <naitik@facebook.com>
  */
 abstract class BaseFacebook
 {
