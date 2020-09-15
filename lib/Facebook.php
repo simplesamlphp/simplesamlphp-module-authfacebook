@@ -64,7 +64,6 @@ class Facebook extends \BaseFacebook
 
 
     /**
-     * @return void
      */
     protected function initSharedSession(): void
     {
@@ -115,7 +114,6 @@ class Facebook extends \BaseFacebook
      *
      * @param string $key
      * @param mixed $value
-     * @return void
      */
     protected function setPersistentData(string $key, $value): void
     {
@@ -148,7 +146,6 @@ class Facebook extends \BaseFacebook
 
     /**
      * @param string $key
-     * @return void
      */
     protected function clearPersistentData(string $key): void
     {
@@ -165,7 +162,6 @@ class Facebook extends \BaseFacebook
 
 
     /**
-     * @return void
      */
     protected function clearAllPersistentData(): void
     {
@@ -179,7 +175,6 @@ class Facebook extends \BaseFacebook
 
 
     /**
-     * @return void
      */
     protected function deleteSharedSessionCookie(): void
     {
@@ -214,7 +209,6 @@ class Facebook extends \BaseFacebook
 
 
     /**
-     * @return void
      */
     protected function establishCSRFTokenState(): void
     {

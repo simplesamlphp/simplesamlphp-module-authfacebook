@@ -90,7 +90,6 @@ class Facebook extends Auth\Source
      * Log-in using Facebook platform
      *
      * @param array &$state  Information about the current authentication.
-     * @return void
      */
     public function authenticate(array &$state): void
     {
@@ -114,7 +113,6 @@ class Facebook extends Auth\Source
 
     /**
      * @param array &$state
-     * @return void
      */
     public function finalStep(array &$state): void
     {

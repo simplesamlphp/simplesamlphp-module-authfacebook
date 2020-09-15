@@ -774,7 +774,6 @@ abstract class BaseFacebook
     /**
      * Lays down a CSRF state token for this process.
      *
-     * @return void
      */
     protected function establishCSRFTokenState(): void
     {
@@ -1275,7 +1274,6 @@ abstract class BaseFacebook
      *
      * @param array $result A record storing the error message returned
      *                      by a failed API call.
-     * @return void
      */
     protected function throwAPIException(array $result): void
     {
@@ -1306,7 +1304,6 @@ abstract class BaseFacebook
      * Prints to the error log if you aren't in command line mode.
      *
      * @param string $msg Log message
-     * @return void
      */
     protected static function errorLog(string $msg): void
     {
@@ -1351,7 +1348,6 @@ abstract class BaseFacebook
 
     /**
      * Destroy the current session
-     * @return void
      */
     public function destroySession(): void
     {
@@ -1455,7 +1451,6 @@ abstract class BaseFacebook
      * @param string $key
      * @param mixed $value
      *
-     * @return void
      */
     abstract protected function setPersistentData(string $key, $value): void;
 
@@ -1473,14 +1468,12 @@ abstract class BaseFacebook
      * Clear the data with $key from the persistent storage
      *
      * @param string $key
-     * @return void
      */
     abstract protected function clearPersistentData(string $key): void;
 
     /**
      * Clear all data from the persistent storage
      *
-     * @return void
      */
     abstract protected function clearAllPersistentData(): void;
 }
