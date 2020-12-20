@@ -32,18 +32,21 @@ class Facebook extends Auth\Source
 
     /**
      * Facebook App ID or API Key
+     * @var string
      */
     private $api_key;
 
 
     /**
      * Facebook App Secret
+     * @var string
      */
     private $secret;
 
 
     /**
      * Which additional data permissions to request from user
+     * @var string|null
      */
     private $req_perms;
 
@@ -59,6 +62,7 @@ class Facebook extends Auth\Source
      *
      * See the Graph API specification for all available user fields:
      * https://developers.facebook.com/docs/graph-api/reference/v2.6/user
+     * @var string|null
      */
     private $user_fields;
 
@@ -138,7 +142,7 @@ class Facebook extends Auth\Source
         $attributes = [];
         foreach ($info as $key => $value) {
             if (is_string($value) && !empty($value)) {
-                $attributes['facebook.' . $key] = [(string) $value];
+                $attributes['facebook.' . $key] = [$value];
             }
         }
 

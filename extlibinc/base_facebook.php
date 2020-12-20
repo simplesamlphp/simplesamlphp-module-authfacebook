@@ -30,6 +30,7 @@ class FacebookApiException extends Exception
 {
     /**
      * The result from the API server that represents the exception information.
+     * @var array
      */
     protected $result;
 
@@ -122,15 +123,16 @@ abstract class BaseFacebook
     /**
      * Version.
      */
-    const VERSION = '3.2.2';
+    public const VERSION = '3.2.2';
 
     /**
      * Signed Request Algorithm.
      */
-    const SIGNED_REQUEST_ALGORITHM = 'HMAC-SHA256';
+    public const SIGNED_REQUEST_ALGORITHM = 'HMAC-SHA256';
 
     /**
      * Default options for curl.
+     * @var array
      */
     public static $CURL_OPTS = [
         CURLOPT_CONNECTTIMEOUT => 10,
@@ -141,6 +143,7 @@ abstract class BaseFacebook
 
     /**
      * Maps aliases to Facebook domains.
+     * @var array
      */
     public static $DOMAIN_MAP = [
         'api'         => 'https://api.facebook.com/',
