@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace SimpleSAML\Module\authfacebook\Auth\Source;
 
 use SimpleSAML\Auth;
@@ -34,21 +36,21 @@ class Facebook extends Auth\Source
      * Facebook App ID or API Key
      * @var string
      */
-    private $api_key;
+    private string $api_key;
 
 
     /**
      * Facebook App Secret
      * @var string
      */
-    private $secret;
+    private string $secret;
 
 
     /**
      * Which additional data permissions to request from user
      * @var string|null
      */
-    private $req_perms;
+    private ?string $req_perms;
 
 
     /**
@@ -64,7 +66,7 @@ class Facebook extends Auth\Source
      * https://developers.facebook.com/docs/graph-api/reference/v2.6/user
      * @var string|null
      */
-    private $user_fields;
+    private ?string $user_fields;
 
 
     /**

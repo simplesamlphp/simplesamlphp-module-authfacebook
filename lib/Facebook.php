@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace SimpleSAML\Module\authfacebook;
 
 use SimpleSAML\Auth;
@@ -24,19 +26,19 @@ class Facebook extends \BaseFacebook
      * Stores the shared session ID if one is set
      * @var string
      */
-    protected $sharedSessionID = '';
+    protected string $sharedSessionID = '';
 
     /**
      * SimpleSAMLphp state array
      * @var array
      */
-    protected $ssp_state = [];
+    protected array $ssp_state = [];
 
     /** @var string|null */
-    protected $state = null;
+    protected ?string $state = null;
 
     /** @var array */
-    protected static $kSupportedKeys = ['state', 'code', 'access_token', 'user_id'];
+    protected static array $kSupportedKeys = ['state', 'code', 'access_token', 'user_id'];
 
 
     /**
