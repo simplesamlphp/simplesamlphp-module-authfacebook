@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Module\authfacebook\Auth\Source;
 
+use SImpleSAML\Assert\Assert;
 use SimpleSAML\Auth;
 use SimpleSAML\Configuration;
 use SimpleSAML\Error;
 use SimpleSAML\Logger;
 use SimpleSAML\Module;
 use SimpleSAML\Utils;
-use Webmozart\Assert\Assert;
 
 /**
  * Authenticate using Facebook Platform.
