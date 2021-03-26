@@ -113,7 +113,8 @@ class Facebook extends Auth\Source
         $url = $facebook->getLoginUrl(['redirect_uri' => $linkback, 'scope' => $this->req_perms]);
         Auth\State::saveState($state, self::STAGE_INIT);
 
-        Utils\HTTP::redirectTrustedURL($url);
+        $httpUtils = new Utils\HTTP();
+        $httpUtils->redirectTrustedURL($url);
     }
 
 
