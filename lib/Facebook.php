@@ -34,9 +34,6 @@ class Facebook extends \BaseFacebook
      */
     protected array $ssp_state = [];
 
-    /** @var string|null */
-    protected ?string $state = null;
-
     /** @var array */
     protected static array $kSupportedKeys = ['state', 'code', 'access_token', 'user_id'];
 
